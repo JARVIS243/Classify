@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Classify – Timetable Generator</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/png" href="assets/logo.png" />
+</head>
+<body>
+
+  <header>
+    <h1>Classify</h1>
+    <p class="tagline">Ningalkku Venda Timetable Njan Ready Akki Tharam 🤓</p>
+  </header>
+
+  <main>
+    <!-- === Step 1: Class Info Form === -->
+    <section class="card">
+      <h2>📝 Step 1: Class Info</h2>
+      <form id="setup-form">
+        <div class="form-group">
+          <label for="class-name">Class Name</label>
+          <input type="text" id="class-name" placeholder="e.g.,10th, BSc CS 1st Year" required />
+        </div>
+        <div class="form-group">
+          <label for="days">Days (comma-separated)</label>
+          <input type="text" id="days" placeholder="e.g., Mon,Tue,Wed,Thu,Fri" required />
+        </div>
+        <div class="form-group">
+          <label for="periods">Periods Per Day</label>
+          <input type="number" id="periods" placeholder="e.g., 6" required />
+        </div>
+        <button type="submit" class="primary-btn">Next ➡️</button>
+      </form>
+    </section>
+
+    <!-- === Step 2: Subjects === -->
+    <section class="card" id="subjects-section" style="display: none;">
+      <h2>📚 Step 2: Subjects & Teachers</h2>
+      <div id="subject-inputs"></div>
+      <button type="button" id="add-subject" class="secondary-btn">➕ Add Subject</button>
+      <button type="button" id="generate-timetable" class="primary-btn">✅ Generate Timetable</button>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Classify by Aju Krishna. All rights reserved.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

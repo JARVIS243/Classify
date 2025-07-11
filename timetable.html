@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Classify – Timetable View</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/png" href="assets/logo.png" />
+
+  <!-- Excel Export -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <!-- Image Export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+  <header>
+    <h1>📅 Timetable</h1>
+    <p class="tagline">Ningalude Timetable Ready Ayyittundu Download cheyiyam 😎</p>
+  </header>
+
+  <main>
+    <section class="card">
+      <div id="timetable-container"></div>
+
+      <div class="action-buttons">
+        <button id="download-excel" class="primary-btn">📊 Download Excel</button>
+        <button id="download-image" class="secondary-btn">🖼️ Download Image</button>
+        <button onclick="window.location.href='index.html'" class="secondary-btn">🔙 Back</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Classify by Aju Krishna. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const saved = JSON.parse(localStorage.getItem("generatedTimetable"));
+
+    if (!saved) {
+      document.getElementById("timetable-container").innerHTML = "<p>No timetable found.</p>";
+    } else {
+      const { data, className, days, periodsPerDay } = saved;
+      const container = document.getElementById("timetable-container");
+
+      const table = document.createElement("table");
+      const thead = document.createElement("thead");
+      const tbody = document.createElement("tbody");
+
+      // Header
+      let headHTML = "<tr><th>Day / Period</th>";
+      for (let p = 1; p <= periodsPerDay; p++) {
+        headHTML += `<th>Period ${p}</th>`;
+      }
+      headHTML += "</tr>";
+      thead.innerHTML = headHTML;
+
+      // Body
+      days.forEach((day, d) => {
+        let row = `<tr><th>${day.trim()}</th>`;
+        for (let p = 0; p < periodsPerDay; p++) {
+          row += `<td>${data[d][p] || ""}</td>`;
+        }
+        row += "</tr>";
+        tbody.innerHTML += row;
+      });
+
+      table.appendChild(thead);
+      table.appendChild(tbody);
+      container.appendChild(table);
+    }
+
+    // === Excel Download ===
+    document.getElementById("download-excel").addEventListener("click", () => {
+      const table = document.querySelector("#timetable-container table");
+      const wb = XLSX.utils.book_new();
+      const ws = XLSX.utils.table_to_sheet(table);
+      XLSX.utils.book_append_sheet(wb, ws, "Timetable");
+      XLSX.writeFile(wb, `${saved.className || "class"}_timetable.xlsx`);
+    });
+
+    // === Image Download ===
+    document.getElementById("download-image").addEventListener("click", () => {
+      const element = document.getElementById("timetable-container");
+      html2canvas(element).then((canvas) => {
+        const link = document.createElement("a");
+        link.download = `${saved.className || "class"}_timetable.png`;
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      });
+    });
+  </script>
+
+</body>
+</html>
